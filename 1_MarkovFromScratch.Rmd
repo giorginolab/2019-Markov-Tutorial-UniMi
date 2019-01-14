@@ -34,8 +34,9 @@ the trajectory has already been converted into microstates).
 (This is the same trajectory distributed
 with PyEmma's `load_2well_discrete` function.
 The `d10` version has the same number of points,
-but decimated by a factor of 10 (so 10 times longer).
-
+but decimated by a factor of 10 (so 10 times longer). For
+PyEmma see http://emma-project.org and the 
+corresponding paper (see references at the bottom).
 
 
 ```{r}
@@ -363,8 +364,9 @@ You are encouraged to check the following software packages and the correspondin
  * [MSMBuilder](http://msmbuilder.org/)
  
 
-Relevant papers (selection):
+Relevant papers (a selection)
 
+1. Scherer MK, Trendelkamp-Schroer B, Paul F, Pérez-Hernández G, Hoffmann M, Plattner N, et al. PyEMMA 2: A Software Package for Estimation, Validation, and Analysis of Markov Models. J Chem Theory Comput. 2015 Nov 10;11(11):5525–42. 
 1. Plattner N, Doerr S, De Fabritiis G, Noé F. Complete protein–protein association kinetics in atomic detail revealed by molecular dynamics simulations and Markov modelling. Nat Chem [Internet]. 2017 Jun 5 [cited 2017 Jun 9];advance online publication. Available from: http://www.nature.com/nchem/journal/vaop/ncurrent/full/nchem.2785.html?WT.feed_name=subjects_molecular-biology
 2. Chodera JD, Noé F. Markov state models of biomolecular conformational dynamics. Current Opinion in Structural Biology. 2014 Apr 1;25(Supplement C):135–44. 
 3. Noé F, Fischer S. Transition networks for modeling the kinetics of conformational change in macromolecules. Current Opinion in Structural Biology. 2008 Apr 1;18(2):154–62. 

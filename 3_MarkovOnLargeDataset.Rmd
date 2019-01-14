@@ -16,15 +16,55 @@ library(ggplot2)
 library(lattice)
 ```
 
+
+
 # Markov modeling on a large dataset
+
+This tutorial shows the Markov model-based computation "macroscopic" quantities 
+in a realistic system, simulated with extensive MD. 
+
+
+There are 3 data sets already downloaded for you:
+* `/mnt/scratch/shared/markov/binding` Ligand binding
+* `/mnt/scratch/shared/markov/villin`  Villin folding
+* `/mnt/scratch/shared/markov/cxcl12`  GPCR conformational transition
+
 
 We now turn to the files contained in `/mnt/scratch/shared/markov/binding/1/filtered/` (Thrombin
 binding dataset). This is 1/3 of the full dataset (see directories 2 and 3).
 
-We use PLUMED to compute the three-dimensional position of the inhibitor.
 
+
+## Dataset layout
+
+Each `.xtc` file is one trajectory of 20 ns (200 frames). Frames are spaced 100 ps from each other. Each trajectory is a small piece of the whole simulation set.  File names indicate the identity of the trajectory (e.g. `e10s1`) and where it started from (e.g. `e7s5f133` means that the first frame of that configuration was frame 133 of `e7s5`). Water molecules were removed ("filtered").
+
+```
+/mnt/scratch/shared/markov/binding/
+    ├── 1
+    │   └── filtered
+    │       ├── e10s1_e7s5f133
+    │       │   └── e10s1_e7s5f133-SDOERR_thrombinLig6x1-0-1-RND6286_9.filtered.xtc
+    │       ├── e10s2_e7s5f159
+    │       │   └── e10s2_e7s5f159-SDOERR_thrombinLig6x1-0-1-RND8907_9.filtered.xtc
+    │       ├── e10s3_e7s5f133
+    │       │   └── e10s3_e7s5f133-SDOERR_thrombinLig6x1-0-1-RND5451_9.filtered.xtc
+...    
+
+            ├── e9s6_e2s5f112
+            │   └── e9s6_e2s5f112-SDOERR_thrombinLig6x3-0-1-RND3971_9.filtered.xtc
+            ├── filtered.pdb
+            └── filtered.psf
+
+860 directories, 858 files
+```
+
+## Metric calculation
+
+In the previous steps we used PLUMED to compute the three-dimensional position of the inhibitor
+relative to the target. The distance was computed **after** alignment 
+with a reference structure (to avoid rotational diffusion).
 The trajectories are identified by the first column. 
-We can only plot a few of them.
 
 ```{r}
 d<-read.table("metrics.dat",head=F)
@@ -33,10 +73,10 @@ d$Traj <- sub("_.+$","",d$TrajLong)  # Shorten the trajectory name
 d$Traj <- factor(d$Traj)
 d$TrajLong <- NULL
 
-
+head(d)
 ```
 
-We extract the first trajectory for visualization.
+We plot a few of them. Extract the first trajectory for visualization.
 
 ```{r}
 dp <- subset(d,d$Traj == "e36s5")
@@ -58,7 +98,7 @@ matplot(dp$Frame, dp[,c("X","Y","Z")], type="l")
 ## Clustering
 
 Before we proceed, we need to move from the N-dimensional space of continuous
-coordinates (in this case 3) to a discrete "microstate". This is
+coordinates (in this case 3D) to a discrete "microstate". This is
 achieved by clustering.  Of several algorithms, we use k-means.
 The Markov model will approximate
 the "jumping" process between those states.
